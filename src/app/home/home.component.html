@@ -1,0 +1,22 @@
+<div class="home-container">
+  <div class="search-bar">
+    <input [(ngModel)]="searchTerm" placeholder="Card name" />
+    <button class="button" (click)="onSearch()" [disabled]="loading">Search</button>
+  </div>
+  @if (loading) {
+    <div class="loading">Loading...</div>
+  }
+  @if (error) {
+    <div class="error">{{ error }}</div>
+  }
+  <div class="card-grid">
+    @for (card of cards; track card) {
+      @if (card.imageUrl) {
+        <div class="card">
+          <img [src]="card.imageUrl" alt="{{ card.name }}" />
+          <p>{{ card.name }}</p>
+        </div>
+      }
+    }
+  </div>
+</div>

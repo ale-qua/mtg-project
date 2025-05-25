@@ -1,0 +1,197 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+.deck-container {
+  width: 100vw;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  background: #fff;
+}
+
+.main-content {
+  display: flex;
+  width: 100vw;
+  height: calc(100vh - 80px); /* 80px header */
+  min-height: 400px;
+}
+
+.left-panel,
+.right-panel {
+  flex: 1 1 0;
+  min-width: 0;
+  height: 100%;
+  min-height: 0;
+  padding: 2rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #fff;
+  border: none;
+  box-shadow: none;
+  overflow-y: auto;
+}
+
+.left-panel {
+  border-right: 1px solid #e0e0e0;
+}
+
+.search-bar {
+  display: flex;
+  gap: 0.5rem;
+  width: 100%;
+  max-width: 350px;
+  margin-bottom: 2rem;
+  justify-content: center;
+}
+
+.card-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.07);
+  padding: 0.5rem;
+  text-align: center;
+  width: 150px;
+  position: relative;
+}
+
+.card img {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+}
+
+.button, .button.small {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 0.25rem;
+}
+.button.small {
+  padding: 0.25rem 0.5rem;
+  margin: 0 0.1rem;
+  font-size: 0.9em;
+}
+
+.button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.error {
+  color: red;
+  margin-top: 0.5rem;
+}
+
+.deck-list {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.deck-preview-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+.deck-preview-link:hover .deck-preview {
+  background: #e0f0ff;
+}
+
+.deck-preview {
+  display: flex;
+  align-items: center;
+  background: #f8f8f8;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  border: 2px solid transparent;
+  position: relative;
+  transition: border 0.2s;
+}
+.deck-preview.selected {
+  width: 80%;
+  border-color: #007bff;
+  background: #e9f3ff;
+}
+
+.deck-icon {
+  font-size: 1.7em;
+  margin-right: 0.6em;
+}
+.deck-info {
+  flex: 1;
+}
+.deck-name {
+  font-weight: bold;
+  font-size: 1.09em;
+}
+.deck-count {
+  font-size: 0.95em;
+  color: #444;
+}
+.delete-btn {
+  background: transparent;
+  border: none;
+  color: #c00;
+  font-size: 1.2em;
+  margin-left: 0.5rem;
+  cursor: pointer;
+}
+.delete-btn:hover {
+  color: #f00;
+}
+
+.add-deck-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.selected-deck {
+  background: #f9f9f9;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: 1rem;
+  width: 90%;
+}
+
+.count {
+  display: block;
+  font-weight: bold;
+  margin: 0.2em 0;
+  color: #007bff;
+  font-size: 1.1em;
+}
+
+@media (max-width: 900px) {
+  .main-content {
+    flex-direction: column;
+    height: auto;
+  }
+  .left-panel,
+  .right-panel {
+    min-height: unset;
+    width: 100vw;
+    border-right: none;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 1.5rem 0.5rem;
+    height: 50vh;
+    overflow-y: auto;
+  }
+  .right-panel {
+    border-bottom: none;
+  }
+}
