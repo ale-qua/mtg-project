@@ -6,7 +6,7 @@
     <div class="left-panel">
       <h2>Search Cards</h2>
       <div class="search-bar">
-        <input [(ngModel)]="searchTerm" placeholder="Card name to add" />
+        <input [(ngModel)]="searchTerm" placeholder="Card name to add" (keydown.enter)="onSearch()"/>
         <button class="button" (click)="onSearch()">Search</button>
       </div>
       @if (error) {

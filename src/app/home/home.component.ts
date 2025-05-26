@@ -1,3 +1,4 @@
+import { RouterModule } from '@angular/router';
 import { Component } from '@angular/core';
 import { CardService, Card } from '../services/card.service';
 
@@ -6,7 +7,7 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, RouterModule],
   styleUrls: ['./home.component.css'],
   templateUrl: './home.component.html'
 })
