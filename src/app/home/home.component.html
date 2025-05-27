@@ -1,7 +1,7 @@
 <div class="home-container">
   <div class="search-bar">
-    <input [(ngModel)]="searchTerm" placeholder="Card name"/>
-    <button class="button" (click)="onSearch()" [disabled]="loading" (keydown.enter)="onSearch()">Search</button>
+    <input [(ngModel)]="searchTerm" placeholder="Card name" (keydown.enter)="onSearch()"/>
+    <button class="button" (click)="onSearch()" [disabled]="loading" >Search</button>
   </div>
   @if (loading) {
     <div class="loading">Loading...</div>

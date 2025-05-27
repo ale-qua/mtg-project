@@ -21,14 +21,18 @@ export class DeckComponent implements OnInit {
   error = '';
 
   decks: Deck[] = [];
-  selectedDeckIdx = 0; // index in decks[]
+  selectedDeckIdx = 0;
   newDeckName = '';
 
   constructor(private cardService: CardService) {}
 
   ngOnInit() {
-    const saved = localStorage.getItem('myDecks');
-    this.decks = saved ? JSON.parse(saved) : [];
+    try {
+      const saved = localStorage.getItem('myDecks');
+      this.decks = saved ? JSON.parse(saved) : [];
+    } catch {
+      this.decks = [];
+    }
     if (this.decks.length === 0) {
       this.addDeck('Main Deck');
     }
@@ -36,10 +40,16 @@ export class DeckComponent implements OnInit {
 
   // Deck management
   addDeck(name?: string) {
-    const deckName = name || this.newDeckName.trim() || `Deck ${this.decks.length + 1}`;
+    const deckName = (name || this.newDeckName.trim() || `Deck ${this.decks.length + 1}`).slice(0, 20);
+    // Check for duplicate names (optional)
+    if (this.decks.some(deck => deck.name.toLowerCase() === deckName.toLowerCase())) {
+      this.error = `A deck named "${deckName}" already exists.`;
+      return;
+    }
     this.decks.push({ name: deckName, cards: {} });
     this.selectedDeckIdx = this.decks.length - 1;
     this.newDeckName = '';
+    this.error = '';
     this.saveDecks();
   }
 
@@ -51,11 +61,18 @@ export class DeckComponent implements OnInit {
   }
 
   selectDeck(idx: number) {
-    this.selectedDeckIdx = idx;
+    if (idx >= 0 && idx < this.decks.length) {
+      this.selectedDeckIdx = idx;
+    }
   }
 
   deleteDeck(idx: number) {
+    if (idx < 0 || idx >= this.decks.length) return;
     this.decks.splice(idx, 1);
+    // Correggo la selezione del deck dopo la cancellazione
+    if (this.decks.length === 0) {
+      this.addDeck('Main Deck');
+    }
     if (this.selectedDeckIdx >= this.decks.length) {
       this.selectedDeckIdx = this.decks.length - 1;
     }
@@ -75,7 +92,7 @@ export class DeckComponent implements OnInit {
 
   // Card management
   addToDeck(card: Card) {
-    const deck = this.decks[this.selectedDeckIdx];
+    const deck = this.selectedDeck;
     if (!deck.cards[card.id]) {
       deck.cards[card.id] = { card, count: 1 };
     } else {
@@ -85,7 +102,7 @@ export class DeckComponent implements OnInit {
   }
 
   removeFromDeck(card: Card) {
-    const deck = this.decks[this.selectedDeckIdx];
+    const deck = this.selectedDeck;
     if (deck.cards[card.id]) {
       deck.cards[card.id].count--;
       if (deck.cards[card.id].count <= 0) {
@@ -101,10 +118,24 @@ export class DeckComponent implements OnInit {
   }
 
   get selectedDeck(): Deck {
-    return this.decks[this.selectedDeckIdx];
+    // Protezione per indice out of bounds
+    return this.decks[this.selectedDeckIdx] ?? this.decks[0];
   }
 
   getDeckCardCount(deck: Deck): number {
     return Object.values(deck.cards).reduce((acc, entry) => acc + entry.count, 0);
+  }
+
+  // TrackBy functions for better performance in ngFor
+  trackByCard(_index: number, card: Card) {
+    return card.id;
+  }
+
+  trackByDeck(_index: number, deck: Deck) {
+    return deck.name;
+  }
+
+  trackByEntry(_index: number, entry: { key: string, value: any }) {
+    return entry.key;
   }
 }

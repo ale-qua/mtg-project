@@ -1,22 +1,19 @@
 <div class="deck-container">
-  <h1 style="text-align:center; margin-top:2rem;">Deck Builder</h1>
+  <h1>Deck Builder</h1>
   <div class="main-content">
 
     <!-- Left: Search & Results -->
     <div class="left-panel">
       <h2>Search Cards</h2>
       <div class="search-bar">
-        <input [(ngModel)]="searchTerm" placeholder="Card name to add" (keydown.enter)="onSearch()"/>
+        <input [(ngModel)]="searchTerm" placeholder="Card name to add" (keydown.enter)="onSearch()" />
         <button class="button" (click)="onSearch()">Search</button>
       </div>
-      @if (error) {
-        <div class="error">{{ error }}</div>
-      }
       <div class="card-grid">
         @for (card of cards; track card) {
           @if (card.imageUrl) {
             <div class="card">
-              <img [src]="card.imageUrl" alt="{{ card.name }}" />
+              <img [src]="card.imageUrl" [alt]="card.name" />
               <p>{{ card.name }}</p>
               <button class="button" (click)="addToDeck(card)">Add</button>
             </div>
@@ -34,26 +31,34 @@
           placeholder="New deck name"
           maxlength="20"
           (input)="onDeckNameInput()"
+          (keydown.enter)="addDeck()"
         />
         <button class="button" (click)="addDeck()">Add Deck</button>
       </div>
+
+      @if (error) {
+        <div class="error">{{ error }}</div>
+      }
+
       <div class="deck-list">
-        @for (d of decks; let i = $index; track d) {
-            <div
-              class="deck-preview"
-              [class.selected]="i === selectedDeckIdx"
-            >
-              <span class="deck-icon">🃏</span>
-              <div class="deck-info">
-                <div class="deck-name">{{ d.name }}</div>
-                <div class="deck-count">{{ getDeckCardCount(d) }} cards</div>
-              </div>
-              <button
-                class="delete-btn"
-                title="Delete deck"
-                (click)="deleteDeck(i); $event.preventDefault(); $event.stopPropagation()"
-              >🗑️</button>
+        @for (d of decks; track d) {
+          @let i = $index;
+          <div
+            class="deck-preview"
+            [class.selected]="i === selectedDeckIdx"
+            (click)="selectDeck(i)"
+          >
+            <span class="deck-icon">🃏</span>
+            <div class="deck-info">
+              <div class="deck-name">{{ d.name }}</div>
+              <div class="deck-count">{{ getDeckCardCount(d) }} cards</div>
             </div>
+            <button
+              class="delete-btn"
+              title="Delete deck"
+              (click)="deleteDeck(i); $event.preventDefault(); $event.stopPropagation()"
+            >🗑️</button>
+          </div>
         }
       </div>
 
@@ -64,7 +69,7 @@
             @for (entry of (selectedDeck.cards | keyvalue); track entry.key) {
               @if (entry.value.card.imageUrl) {
                 <div class="card">
-                  <img [src]="entry.value.card.imageUrl" alt="{{ entry.value.card.name }}" />
+                  <img [src]="entry.value.card.imageUrl" [alt]="entry.value.card.name" />
                   <p>{{ entry.value.card.name }}</p>
                   <span class="count">{{ entry.value.count }}x</span>
                   <button class="button small" (click)="addToDeck(entry.value.card)">+</button>
@@ -73,7 +78,9 @@
               }
             }
           </div>
-          <button class="button" (click)="saveDecks()" [disabled]="getDeckCardCount(selectedDeck)===0">Save Deck</button>
+          <div class="save-btn-container">
+            <button class="button" (click)="saveDecks()" [disabled]="getDeckCardCount(selectedDeck)===0">Save Deck</button>
+          </div>
         </div>
       }
     </div>
