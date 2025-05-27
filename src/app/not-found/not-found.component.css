@@ -1,0 +1,20 @@
+.not-found-container {
+  margin: 60px auto;
+  max-width: 400px;
+  padding: 32px 24px;
+  background: #faf7f6;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  text-align: center;
+}
+
+.not-found-container h2 {
+  color: #c0392b;
+  margin-bottom: 18px;
+}
+
+.not-found-container p {
+  color: #333;
+  font-size: 1.1em;
+}
+

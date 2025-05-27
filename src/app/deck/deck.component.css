@@ -96,7 +96,7 @@ h1 {
   box-shadow: 0 2px 7px rgba(0,0,0,0.08);
   padding: 0.5rem;
   text-align: center;
-  width: 90px;        /* dimezzato da 180px */
+  width: 90px;
   position: relative;
   transition: box-shadow 0.18s;
   display: flex;

@@ -51,7 +51,7 @@ export class DeckComponent implements OnInit {
     this.selectedDeckIdx = this.decks.length - 1;
     this.newDeckName = '';
     this.error = '';
-    this.persistDecks(); // <-- usa persistDecks qui!
+    this.persistDecks();
   }
 
   onDeckNameInput() {
@@ -104,7 +104,7 @@ export class DeckComponent implements OnInit {
     } else {
       deck.cards[card.id].count++;
     }
-    this.persistDecks(); // <-- solo persistenza, niente alert verde
+    this.persistDecks();
   }
 
   removeFromDeck(card: Card) {
@@ -114,11 +114,11 @@ export class DeckComponent implements OnInit {
       if (deck.cards[card.id].count <= 0) {
         delete deck.cards[card.id];
       }
-      this.persistDecks(); // <-- solo persistenza, niente alert verde
+      this.persistDecks();
     }
   }
 
-  // Salva SOLO quando clicchi esplicitamente su "Salva"
+
   saveDecks() {
     this.persistDecks();
     this.showSuccessAlert = true;
@@ -127,7 +127,7 @@ export class DeckComponent implements OnInit {
     }, 2000);
   }
 
-  // Funzione di persistenza senza alert
+  
   private persistDecks() {
     localStorage.setItem('myDecks', JSON.stringify(this.decks));
   }

@@ -16,9 +16,7 @@ export interface Card {
   rarity?: string;
   set?: string;
   setName?: string;
-  artist?: string;
   flavor?: string;
-  // aggiungi altri campi se necessario
 }
 
 @Injectable({

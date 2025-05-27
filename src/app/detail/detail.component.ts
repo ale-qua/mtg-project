@@ -1,8 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CardService, Card } from '../services/card.service';
-import { inject } from '@angular/core';
-import { Observable, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-detail',
