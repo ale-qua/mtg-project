@@ -24,6 +24,8 @@ export class DeckComponent implements OnInit {
   selectedDeckIdx = 0;
   newDeckName = '';
 
+  showSuccessAlert = false; // Alert verde per salvataggio
+
   constructor(private cardService: CardService) {}
 
   ngOnInit() {
@@ -41,7 +43,6 @@ export class DeckComponent implements OnInit {
   // Deck management
   addDeck(name?: string) {
     const deckName = (name || this.newDeckName.trim() || `Deck ${this.decks.length + 1}`).slice(0, 20);
-    // Check for duplicate names (optional)
     if (this.decks.some(deck => deck.name.toLowerCase() === deckName.toLowerCase())) {
       this.error = `A deck named "${deckName}" already exists.`;
       return;
@@ -50,7 +51,7 @@ export class DeckComponent implements OnInit {
     this.selectedDeckIdx = this.decks.length - 1;
     this.newDeckName = '';
     this.error = '';
-    this.saveDecks();
+    this.persistDecks(); // <-- usa persistDecks qui!
   }
 
   onDeckNameInput() {
@@ -69,14 +70,13 @@ export class DeckComponent implements OnInit {
   deleteDeck(idx: number) {
     if (idx < 0 || idx >= this.decks.length) return;
     this.decks.splice(idx, 1);
-    // Correggo la selezione del deck dopo la cancellazione
     if (this.decks.length === 0) {
       this.addDeck('Main Deck');
     }
     if (this.selectedDeckIdx >= this.decks.length) {
       this.selectedDeckIdx = this.decks.length - 1;
     }
-    this.saveDecks();
+    this.persistDecks();
   }
 
   // Card search
@@ -93,12 +93,18 @@ export class DeckComponent implements OnInit {
   // Card management
   addToDeck(card: Card) {
     const deck = this.selectedDeck;
+    const totalCount = this.getDeckCardCount(deck);
+    if (totalCount >= 100) {
+      this.error = 'Hai raggiunto il limite massimo di 100 carte per mazzo.';
+      setTimeout(() => (this.error = ''), 2500);
+      return;
+    }
     if (!deck.cards[card.id]) {
       deck.cards[card.id] = { card, count: 1 };
     } else {
       deck.cards[card.id].count++;
     }
-    this.saveDecks();
+    this.persistDecks(); // <-- solo persistenza, niente alert verde
   }
 
   removeFromDeck(card: Card) {
@@ -108,17 +114,25 @@ export class DeckComponent implements OnInit {
       if (deck.cards[card.id].count <= 0) {
         delete deck.cards[card.id];
       }
-      this.saveDecks();
+      this.persistDecks(); // <-- solo persistenza, niente alert verde
     }
   }
 
-  // Utility
+  // Salva SOLO quando clicchi esplicitamente su "Salva"
   saveDecks() {
+    this.persistDecks();
+    this.showSuccessAlert = true;
+    setTimeout(() => {
+      this.showSuccessAlert = false;
+    }, 2000);
+  }
+
+  // Funzione di persistenza senza alert
+  private persistDecks() {
     localStorage.setItem('myDecks', JSON.stringify(this.decks));
   }
 
   get selectedDeck(): Deck {
-    // Protezione per indice out of bounds
     return this.decks[this.selectedDeckIdx] ?? this.decks[0];
   }
 
@@ -126,7 +140,6 @@ export class DeckComponent implements OnInit {
     return Object.values(deck.cards).reduce((acc, entry) => acc + entry.count, 0);
   }
 
-  // TrackBy functions for better performance in ngFor
   trackByCard(_index: number, card: Card) {
     return card.id;
   }

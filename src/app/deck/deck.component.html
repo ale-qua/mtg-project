@@ -1,7 +1,6 @@
 <div class="deck-container">
   <h1>Deck Builder</h1>
   <div class="main-content">
-
     <!-- Left: Search & Results -->
     <div class="left-panel">
       <h2>Search Cards</h2>
@@ -22,7 +21,7 @@
       </div>
     </div>
 
-    <!-- Right: Decks List and Deck View -->
+    <!-- Right: Deck select and Deck View -->
     <div class="right-panel">
       <h2>My Decks</h2>
       <div class="add-deck-form">
@@ -40,46 +39,50 @@
         <div class="error">{{ error }}</div>
       }
 
-      <div class="deck-list">
-        @for (d of decks; track d) {
-          @let i = $index;
-          <div
-            class="deck-preview"
-            [class.selected]="i === selectedDeckIdx"
-            (click)="selectDeck(i)"
-          >
-            <span class="deck-icon">🃏</span>
-            <div class="deck-info">
-              <div class="deck-name">{{ d.name }}</div>
-              <div class="deck-count">{{ getDeckCardCount(d) }} cards</div>
-            </div>
-            <button
-              class="delete-btn"
-              title="Delete deck"
-              (click)="deleteDeck(i); $event.preventDefault(); $event.stopPropagation()"
-            >🗑️</button>
-          </div>
-        }
+      <!-- Deck selector as a single row with dropdown -->
+      <div class="deck-select-row">
+        <label for="deckSelect">Select a deck:</label>
+        <select id="deckSelect" [(ngModel)]="selectedDeckIdx" (change)="selectDeck(selectedDeckIdx)">
+          @for (d of decks; track d) {
+            @let i = $index;
+            <option [value]="i">{{ d.name }} ({{ getDeckCardCount(d) }} cards)</option>
+          }
+        </select>
+        <button
+          class="delete-btn"
+          *ngIf="selectedDeckIdx !== null && selectedDeckIdx !== undefined"
+          title="Delete deck"
+          (click)="deleteDeck(selectedDeckIdx)"
+        >🗑️</button>
       </div>
+
+      <!-- Alert verde salvataggio -->
+      @if (showSuccessAlert) {
+        <div class="success-alert">
+          Mazzo salvato con successo!
+        </div>
+      }
 
       @if (selectedDeck) {
         <div class="selected-deck">
-          <h3>{{ selectedDeck.name }}</h3>
-          <div class="card-grid">
+          <div class="deck-title-row">
+            <h3>{{ selectedDeck.name }}</h3>
+            <button class="button save-btn-inline" (click)="saveDecks()" [disabled]="getDeckCardCount(selectedDeck)===0">Salva Mazzo</button>
+          </div>
+          <div class="card-grid large-grid">
             @for (entry of (selectedDeck.cards | keyvalue); track entry.key) {
               @if (entry.value.card.imageUrl) {
                 <div class="card">
                   <img [src]="entry.value.card.imageUrl" [alt]="entry.value.card.name" />
                   <p>{{ entry.value.card.name }}</p>
-                  <span class="count">{{ entry.value.count }}x</span>
-                  <button class="button small" (click)="addToDeck(entry.value.card)">+</button>
-                  <button class="button small" (click)="removeFromDeck(entry.value.card)" [disabled]="entry.value.count<=0">-</button>
+                  <div class="card-controls-row">
+                    <span class="count">{{ entry.value.count }}x</span>
+                    <button class="button small" (click)="addToDeck(entry.value.card)" [disabled]="getDeckCardCount(selectedDeck)>=100">+</button>
+                    <button class="button small" (click)="removeFromDeck(entry.value.card)" [disabled]="entry.value.count<=0">-</button>
+                  </div>
                 </div>
               }
             }
-          </div>
-          <div class="save-btn-container">
-            <button class="button" (click)="saveDecks()" [disabled]="getDeckCardCount(selectedDeck)===0">Save Deck</button>
           </div>
         </div>
       }
