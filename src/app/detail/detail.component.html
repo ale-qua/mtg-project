@@ -1,1 +1,22 @@
-<p>detail works!</p>
+@if (card) {
+  <div class="detail-container">
+    <img [src]="card.imageUrl" alt="{{ card.name }}" class="detail-image"/>
+    <h2>{{ card.name }}</h2>
+    @if (card.type) {
+      <p><strong>Type:</strong> {{ card.type }}</p>
+    }
+    @if (card.description) {
+      <p><strong>Description:</strong> {{ card.description }}</p>
+    }
+    @if (card.manaCost) {
+      <p><strong>Mana cost:</strong> {{ card.manaCost }}</p>
+    }
+    <!-- aggiungi altri dettagli della carta qui -->
+  </div>
+}
+@if (loading) {
+  <div>Loading...</div>
+}
+@if (error) {
+  <div class="error">{{ error }}</div>
+}

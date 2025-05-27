@@ -12,7 +12,7 @@
   <div class="card-grid">
     @for (card of cards; track card) {
       @if (card.imageUrl) {
-        <div class="card" [routerLink]="['/detail']" >
+        <div class="card" [routerLink]="['/detail', card.id]">
           <img [src]="card.imageUrl" alt="{{ card.name }}" />
           <p>{{ card.name }}</p>
         </div>
