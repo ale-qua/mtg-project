@@ -1,17 +1,36 @@
 @if (card) {
-  <div class="detail-container">
+  <div class="detail-flex-container">
     <img [src]="card.imageUrl" alt="{{ card.name }}" class="detail-image"/>
-    <h2>{{ card.name }}</h2>
-    @if (card.type) {
-      <p><strong>Type:</strong> {{ card.type }}</p>
-    }
-    @if (card.description) {
-      <p><strong>Description:</strong> {{ card.description }}</p>
-    }
-    @if (card.manaCost) {
-      <p><strong>Mana cost:</strong> {{ card.manaCost }}</p>
-    }
-    <!-- aggiungi altri dettagli della carta qui -->
+    <div class="detail-info">
+      <h2>{{ card.name }}</h2>
+      @if (card.type) {
+        <p><strong>Type:</strong> {{ card.type }}</p>
+      }
+      @if (card.description) {
+        <p><strong>Description:</strong> {{ card.description }}</p>
+      }
+      @if (card.manaCost) {
+        <p><strong>Mana cost:</strong> {{ card.manaCost }}</p>
+      }
+      @if (card.text) {
+        <p><strong>Description:</strong> {{ card.text }}</p>
+      }
+      @if (card.flavor) {
+        <p><strong>Flavor text:</strong> {{ card.flavor }}</p>
+      }
+      @if (card.power) {
+        <p><strong>Power:</strong> {{ card.power }}</p>
+      }
+      @if (card.toughness) {
+        <p><strong>Toughness:</strong> {{ card.toughness }}</p>
+      }
+      @if (card.rarity) {
+        <p><strong>Rarity:</strong> {{ card.rarity }}</p>
+      }
+      @if (card.set) {
+        <p><strong>Set:</strong> {{ card.set }}</p>
+      }
+    </div>
   </div>
 }
 @if (loading) {
